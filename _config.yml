@@ -1,7 +1,14 @@
 title: Daily.AI
-theme: chirpy
+theme: jekyll-theme-chirpy
 baseurl: ""
 markdown: kramdown
+
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+
+exclude: [Gemfile, Gemfile.lock, node_modules, vendor]
+
+# GitHub Pages support
+github:
+  is_project_page: false
