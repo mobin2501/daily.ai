@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Manage Providers & Models</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Admin Panel</h1>
+            <a href="/" class="text-blue-600 hover:underline">← Back to Chat</a>
+        </div>
+
+        <!-- Add Provider Form -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Add Provider</h2>
+            <form action="/admin/add-provider" method="POST" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Key</label>
+                        <input name="key" type="text" placeholder="gemini" class="w-full border border-gray-300 rounded-lg p-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input name="name" type="text" placeholder="Google Gemini" class="w-full border border-gray-300 rounded-lg p-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Model Family</label>
+                        <input name="model_family" type="text" placeholder="gemini" class="w-full border border-gray-300 rounded-lg p-3" required>
+                    </div>
+                </div>
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg">
+                    Add Provider
+                </button>
+            </form>
+        </div>
+
+        <!-- Add Model Form -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Add Model</h2>
+            <form action="/admin/add-model" method="POST" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Provider</label>
+                        <select name="provider_id" class="w-full border border-gray-300 rounded-lg p-3" required>
+                            <option value="">Select Provider</option>
+                            {% for provider in providers %}
+                            <option value="{{ provider.id }}">{{ provider.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input name="name" type="text" placeholder="FLASH_20" class="w-full border border-gray-300 rounded-lg p-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Model ID</label>
+                        <input name="model_id" type="text" placeholder="gemini-2.0-flash" class="w-full border border-gray-300 rounded-lg p-3" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Default?</label>
+                        <input name="is_default" type="checkbox" class="mt-4">
+                    </div>
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg">
+                    Add Model
+                </button>
+            </form>
+        </div>
+
+        <!-- Providers List -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Providers</h2>
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b">
+                        <th class="text-left py-2">ID</th>
+                        <th class="text-left py-2">Key</th>
+                        <th class="text-left py-2">Name</th>
+                        <th class="text-left py-2">Model Family</th>
+                        <th class="text-left py-2">Active</th>
+                        <th class="text-left py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                    <tr class="border-b">
+                        <td class="py-2">{{ provider.id }}</td>
+                        <td class="py-2">{{ provider.key }}</td>
+                        <td class="py-2">{{ provider.name }}</td>
+                        <td class="py-2">{{ provider.model_family }}</td>
+                        <td class="py-2">{{ '✓' if provider.is_active else '✗' }}</td>
+                        <td class="py-2">
+                            <a href="/admin/edit-provider/{{ provider.id }}" class="text-blue-600 hover:underline mr-3">Edit</a>
+                            <form action="/admin/delete-provider/{{ provider.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this provider and all its models?')">
+                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Models List -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Models</h2>
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b">
+                        <th class="text-left py-2">ID</th>
+                        <th class="text-left py-2">Provider</th>
+                        <th class="text-left py-2">Name</th>
+                        <th class="text-left py-2">Model ID</th>
+                        <th class="text-left py-2">Default</th>
+                        <th class="text-left py-2">Active</th>
+                        <th class="text-left py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model in models %}
+                    <tr class="border-b">
+                        <td class="py-2">{{ model.id }}</td>
+                        <td class="py-2">{{ model.provider.name }}</td>
+                        <td class="py-2">{{ model.name }}</td>
+                        <td class="py-2">{{ model.model_id }}</td>
+                        <td class="py-2">{{ '✓' if model.is_default else '✗' }}</td>
+                        <td class="py-2">{{ '✓' if model.is_active else '✗' }}</td>
+                        <td class="py-2">
+                            <a href="/admin/edit-model/{{ model.id }}" class="text-blue-600 hover:underline mr-3">Edit</a>
+                            <form action="/admin/delete-model/{{ model.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this model?')">
+                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
