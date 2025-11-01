@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Response</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="max-w-3xl mx-auto my-8">
+    <div class="mb-4">
+        <h2 class="font-bold">Your prompt:</h2>
+        <p class="text-blue-600">{{ prompt }}</p>
+    </div>
+    <div class="mb-4">
+        <h2 class="font-bold">Response:</h2>
+        <div class="border p-4">{{ response|safe }}</div>
+    </div>
+    <a href="/" class="text-blue-500 underline">Ask another question</a>
+</body>
+</html>

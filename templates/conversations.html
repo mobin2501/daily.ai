@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Conversations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="max-w-4xl mx-auto my-8">
+    <h1 class="text-2xl mb-4">All Conversations</h1>
+    {% for conv in conversations %}
+    <div class="border p-4 mb-4">
+        <p class="text-sm text-gray-500">ID: {{ conv.id }} | Created: {{ conv.created_at }}</p>
+        {% for msg in conv.messages %}
+            <div class="my-2 {% if msg.type.value == 'prompt' %}text-blue-600{% endif %}">
+                <strong>{{ msg.type.value }}:</strong> {{ msg.content|safe }}
+                {% if msg.model_family %}<span class="text-xs">({{ msg.model_family.value }})</span>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <a href="/" class="text-blue-500 underline">Back to chat</a>
+</body>
+</html>
