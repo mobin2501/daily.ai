@@ -1,9 +1,9 @@
-from models import db, Conversation, Message, MessageType, ModelFamily
+from models import db, Conversation, Message, MessageType
 import logging
 
 class ConversationService:
     @staticmethod
-    def save_conversation(prompt, response, model_family=ModelFamily.GEMINI):
+    def save_conversation(prompt, response, model_id=None):
         conversation = Conversation()
         db.session.add(conversation)
         db.session.flush()
@@ -19,10 +19,9 @@ class ConversationService:
             conversation_id=conversation.id,
             type=MessageType.RESPONSE,
             content=response,
-            model_family=model_family
+            model_id=model_id
         )
         db.session.add(response_msg)
-        
         
         db.session.commit()
         return conversation.id
