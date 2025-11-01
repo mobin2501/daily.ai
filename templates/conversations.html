@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>All Conversations</title>
+    <title>Conversation History - Daily.AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="max-w-4xl mx-auto my-8">
-    <h1 class="text-2xl mb-4">All Conversations</h1>
-    {% for conv in conversations %}
-    <div class="border p-4 mb-4">
-        <p class="text-sm text-gray-500">ID: {{ conv.id }} | Created: {{ conv.created_at }}</p>
-        {% for msg in conv.messages %}
-            <div class="my-2 {% if msg.type.value == 'prompt' %}text-blue-600{% endif %}">
-                <strong>{{ msg.type.value }}:</strong> {{ msg.content|safe }}
-                {% if msg.model_family %}<span class="text-xs">({{ msg.model_family.value }})</span>{% endif %}
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Conversation History</h1>
+            <a href="/" class="text-blue-600 hover:underline">← Back to Chat</a>
+        </div>
+
+        {% if conversations %}
+            {% for conversation in conversations %}
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4 pb-3 border-b">
+                    <div>
+                        <span class="text-sm text-gray-500">Conversation #{{ conversation.id }}</span>
+                        <span class="text-sm text-gray-400 ml-3">{{ conversation.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                </div>
+
+                {% for message in conversation.messages %}
+                <div class="mb-4 {% if message.type.value == 'prompt' %}bg-blue-50{% else %}bg-gray-50{% endif %} p-4 rounded-lg">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-semibold {% if message.type.value == 'prompt' %}text-blue-700{% else %}text-gray-700{% endif %}">
+                            {% if message.type.value == 'prompt' %}
+                                👤 You
+                            {% else %}
+                                🤖 AI {% if message.model %}({{ message.model.model_id }}){% endif %}
+                            {% endif %}
+                        </span>
+                        <span class="text-xs text-gray-500">{{ message.created_at.strftime('%H:%M:%S') }}</span>
+                    </div>
+                    <div class="text-gray-800">{{ message.content|safe }}</div>
+                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <div class="bg-white rounded-lg shadow-lg p-12 text-center">
+                <p class="text-gray-500 text-lg">No conversations yet. Start chatting to see your history here!</p>
+                <a href="/" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg">
+                    Start Chatting
+                </a>
+            </div>
+        {% endif %}
     </div>
-    {% endfor %}
-    <a href="/" class="text-blue-500 underline">Back to chat</a>
 </body>
 </html>

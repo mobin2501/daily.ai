@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from models import db, Provider, Model
+from models import db, Provider, Model, Conversation
 from genai_client.gemini_client import GeminiClient
 from genai_client.deepseek_client import DeepseekClient
 from services import ConversationService
@@ -126,3 +126,9 @@ def chat():
                          response=response, 
                          client=provider.name, 
                          model=model.model_id)
+    
+    
+@bp.route('/conversations')
+def conversations():
+    conversations = Conversation.query.order_by(Conversation.created_at.desc()).all()
+    return render_template('conversations.html', conversations=conversations)
