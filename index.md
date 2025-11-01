@@ -1,8 +1,3 @@
----
-layout: default
-title: Daily.AI - Multi-Model AI Chat Application
----
-
 <div style="text-align: center; margin: 2rem 0;">
   <h1>🤖 Daily.AI</h1>
   <p style="font-size: 1.2rem; color: #666;">A Flask-based chat application with multiple AI model support</p>
