@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-2xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Edit Model</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <form action="/admin/update-model/{{ model.id }}" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Provider</label>
+                    <select name="provider_id" class="w-full border border-gray-300 rounded-lg p-3" required>
+                        {% for provider in providers %}
+                        <option value="{{ provider.id }}" {% if provider.id == model.provider_id %}selected{% endif %}>
+                            {{ provider.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input name="name" type="text" value="{{ model.name }}" class="w-full border border-gray-300 rounded-lg p-3" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Model ID</label>
+                    <input name="model_id" type="text" value="{{ model.model_id }}" class="w-full border border-gray-300 rounded-lg p-3" required>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input name="is_default" type="checkbox" {% if model.is_default %}checked{% endif %} class="mr-2">
+                        <span class="text-sm font-medium text-gray-700">Default</span>
+                    </label>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input name="is_active" type="checkbox" {% if model.is_active %}checked{% endif %} class="mr-2">
+                        <span class="text-sm font-medium text-gray-700">Active</span>
+                    </label>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg">
+                        Update Model
+                    </button>
+                    <a href="/admin" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg inline-block">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
